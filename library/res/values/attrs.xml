@@ -2,6 +2,4 @@
 
     <!-- The TimePicker style. -->
     <attr name="timePickerStyle" format="reference" />
-
-
 </resources>
