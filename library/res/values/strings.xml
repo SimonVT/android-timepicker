@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The title of the time picker dialog. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_dialog_title">Set time</string>
+    <!-- The title of the date picker dialog. [CHAR LIMIT=NONE] -->
+    <string name="date_picker_dialog_title">Set date</string>
+    <!-- Name of the button in the date/time picker to accept the date/time change -->
+    <string name="date_time_set">Set</string>
+    <!-- Preference framework strings. -->
+    <string name="cancel">Cancel</string>
+
+    <!-- TimePicker - accessibility support -->
+    <!-- Description of the button to increment the TimePicker's minute value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_increment_minute_button">Increment minute</string>
+    <!-- Description of the button to decrement the TimePicker's minute value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_decrement_minute_button">Decrement minute</string>
+    <!-- Description of the button to increment the TimePicker's hour value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_increment_hour_button">Increment hour</string>
+    <!-- Description of the button to decrement the TimePicker's hour value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_decrement_hour_button">Decrement hour</string>
+    <!-- Description of the button to increment the TimePicker's set PM value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_increment_set_pm_button">Set PM</string>
+    <!-- Description of the button to decrement the TimePicker's set AM value. [CHAR LIMIT=NONE] -->
+    <string name="time_picker_decrement_set_am_button">Set AM</string>
+
+    <!-- @hide DO NOT TRANSLATE. Separator between the hour and minute elements in a TimePicker widget -->
+    <string name="time_picker_separator">:</string>
+</resources>
