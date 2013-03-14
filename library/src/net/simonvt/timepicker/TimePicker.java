@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package net.simonvt.widget;
+package net.simonvt.timepicker;
 
-import net.simonvt.timepicker.R;
+import net.simonvt.numberpicker.NumberPicker;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
@@ -28,6 +29,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -49,11 +51,11 @@ import java.util.Locale;
  * or 'P' to pick. For a dialog using this view, see
  * {@link android.app.TimePickerDialog}.
  *<p>
- * See the <a href="{@docRoot}resources/tutorials/views/hello-timepicker.html">Time Picker
- * tutorial</a>.
+ * See the <a href="{@docRoot}guide/topics/ui/controls/pickers.html">Pickers</a>
+ * guide.
  * </p>
  */
-// @Widget
+//@Widget
 public class TimePicker extends FrameLayout {
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
@@ -106,8 +108,6 @@ public class TimePicker extends FrameLayout {
 
     private Locale mCurrentLocale;
 
-    private Context mContext;
-
     /**
      * The callback interface used to indicate the time has been adjusted.
      */
@@ -131,7 +131,6 @@ public class TimePicker extends FrameLayout {
 
     public TimePicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
 
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
@@ -140,9 +139,9 @@ public class TimePicker extends FrameLayout {
         //TypedArray attributesArray = context.obtainStyledAttributes(
         //        attrs, R.styleable.TimePicker, defStyle, 0);
         //int layoutResourceId = attributesArray.getResourceId(
-        //        R.styleable.TimePicker_layout, R.layout.time_picker);
-        int layoutResourceId = R.layout.time_picker_holo;
+        //        R.styleable.TimePicker_internalLayout, R.layout.time_picker);
         //attributesArray.recycle();
+        int layoutResourceId = R.layout.time_picker_holo;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
@@ -163,7 +162,7 @@ public class TimePicker extends FrameLayout {
                 onTimeChanged();
             }
         });
-        mHourSpinnerInput = (EditText) mHourSpinner.findViewById(R.id.np_numberpicker_input);
+        mHourSpinnerInput = (EditText) mHourSpinner.findViewById(R.id.np__numberpicker_input);
         mHourSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         // divider (only for the new widget style)
@@ -177,7 +176,7 @@ public class TimePicker extends FrameLayout {
         mMinuteSpinner.setMinValue(0);
         mMinuteSpinner.setMaxValue(59);
         mMinuteSpinner.setOnLongPressUpdateInterval(100);
-        mMinuteSpinner.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+        mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
         mMinuteSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
                 updateInputState();
@@ -201,7 +200,7 @@ public class TimePicker extends FrameLayout {
                 onTimeChanged();
             }
         });
-        mMinuteSpinnerInput = (EditText) mMinuteSpinner.findViewById(R.id.np_numberpicker_input);
+        mMinuteSpinnerInput = (EditText) mMinuteSpinner.findViewById(R.id.np__numberpicker_input);
         mMinuteSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         /* Get the localized am/pm strings and use them in the spinner */
@@ -236,7 +235,7 @@ public class TimePicker extends FrameLayout {
                     onTimeChanged();
                 }
             });
-            mAmPmSpinnerInput = (EditText) mAmPmSpinner.findViewById(R.id.np_numberpicker_input);
+            mAmPmSpinnerInput = (EditText) mAmPmSpinner.findViewById(R.id.np__numberpicker_input);
             mAmPmSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
 
@@ -256,6 +255,11 @@ public class TimePicker extends FrameLayout {
 
         // set the content descriptions
         setContentDescriptions();
+
+        // If not explicitly specified this view is important for accessibility.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
+            setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
+        }
     }
 
     @Override
@@ -338,7 +342,7 @@ public class TimePicker extends FrameLayout {
         }
 
         @SuppressWarnings({"unused", "hiding"})
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
@@ -479,16 +483,28 @@ public class TimePicker extends FrameLayout {
         }
         mTempCalendar.set(Calendar.HOUR_OF_DAY, getCurrentHour());
         mTempCalendar.set(Calendar.MINUTE, getCurrentMinute());
-        String selectedDateUtterance = DateUtils.formatDateTime(mContext,
+        String selectedDateUtterance = DateUtils.formatDateTime(getContext(),
                 mTempCalendar.getTimeInMillis(), flags);
         event.getText().add(selectedDateUtterance);
+    }
+
+    @Override
+    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+        super.onInitializeAccessibilityEvent(event);
+        event.setClassName(TimePicker.class.getName());
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName(TimePicker.class.getName());
     }
 
     private void updateHourControl() {
         if (is24HourView()) {
             mHourSpinner.setMinValue(0);
             mHourSpinner.setMaxValue(23);
-            mHourSpinner.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+            mHourSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
         } else {
             mHourSpinner.setMinValue(1);
             mHourSpinner.setMaxValue(12);
@@ -524,22 +540,30 @@ public class TimePicker extends FrameLayout {
     }
 
     private void setContentDescriptions() {
+        if (true) return; // This is never reached anyway, backport doesn't have increment/decrement buttons
         // Minute
-        String text = mContext.getString(R.string.time_picker_increment_minute_button);
-        mMinuteSpinner.findViewById(R.id.np_increment).setContentDescription(text);
-        text = mContext.getString(R.string.time_picker_decrement_minute_button);
-        mMinuteSpinner.findViewById(R.id.np_decrement).setContentDescription(text);
+        trySetContentDescription(mMinuteSpinner, R.id.np__increment,
+                R.string.time_picker_increment_minute_button);
+        trySetContentDescription(mMinuteSpinner, R.id.np__decrement,
+                R.string.time_picker_decrement_minute_button);
         // Hour
-        text = mContext.getString(R.string.time_picker_increment_hour_button);
-        mHourSpinner.findViewById(R.id.np_increment).setContentDescription(text);
-        text = mContext.getString(R.string.time_picker_decrement_hour_button);
-        mHourSpinner.findViewById(R.id.np_decrement).setContentDescription(text);
+        trySetContentDescription(mHourSpinner, R.id.np__increment,
+                R.string.time_picker_increment_hour_button);
+        trySetContentDescription(mHourSpinner, R.id.np__decrement,
+                R.string.time_picker_decrement_hour_button);
         // AM/PM
         if (mAmPmSpinner != null) {
-            text = mContext.getString(R.string.time_picker_increment_set_pm_button);
-            mAmPmSpinner.findViewById(R.id.np_increment).setContentDescription(text);
-            text = mContext.getString(R.string.time_picker_decrement_set_am_button);
-            mAmPmSpinner.findViewById(R.id.np_decrement).setContentDescription(text);
+            trySetContentDescription(mAmPmSpinner, R.id.np__increment,
+                    R.string.time_picker_increment_set_pm_button);
+            trySetContentDescription(mAmPmSpinner, R.id.np__decrement,
+                    R.string.time_picker_decrement_set_am_button);
+        }
+    }
+
+    private void trySetContentDescription(View root, int viewId, int contDescResId) {
+        View target = root.findViewById(viewId);
+        if (target != null) {
+            target.setContentDescription(getContext().getString(contDescResId));
         }
     }
 
@@ -551,7 +575,7 @@ public class TimePicker extends FrameLayout {
         // value and having the IME up makes no sense.
         //InputMethodManager inputMethodManager = InputMethodManager.peekInstance();
         InputMethodManager inputMethodManager =
-                (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
             if (inputMethodManager.isActive(mHourSpinnerInput)) {
                 mHourSpinnerInput.clearFocus();

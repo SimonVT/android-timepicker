@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package net.simonvt.app;
+package net.simonvt.timepicker;
 
-import net.simonvt.timepicker.R;
-import net.simonvt.widget.TimePicker;
+import net.simonvt.timepicker.TimePicker.OnTimeChangedListener;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,13 +28,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 /**
- * A dialog that prompts the user for the time of day using a {@link android.widget.TimePicker}.
+ * A dialog that prompts the user for the time of day using a {@link TimePicker}.
  *
- * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-timepicker.html">Time Picker
- * tutorial</a>.</p>
+ * <p>See the <a href="{@docRoot}guide/topics/ui/controls/pickers.html">Pickers</a>
+ * guide.</p>
  */
 public class TimePickerDialog extends AlertDialog
-        implements OnClickListener, TimePicker.OnTimeChangedListener {
+        implements OnClickListener, OnTimeChangedListener {
 
     /**
      * The callback interface used to indicate the user is done filling in
@@ -97,9 +96,7 @@ public class TimePickerDialog extends AlertDialog
         setTitle(R.string.time_picker_dialog_title);
 
         Context themeContext = getContext();
-        setButton(BUTTON_POSITIVE, themeContext.getText(R.string.date_time_set), this);
-        setButton(BUTTON_NEGATIVE, themeContext.getText(R.string.cancel),
-                (OnClickListener) null);
+        setButton(BUTTON_POSITIVE, themeContext.getText(R.string.date_time_done), this);
 
         LayoutInflater inflater =
                 (LayoutInflater) themeContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -115,11 +112,7 @@ public class TimePickerDialog extends AlertDialog
     }
 
     public void onClick(DialogInterface dialog, int which) {
-        if (mCallback != null) {
-            mTimePicker.clearFocus();
-            mCallback.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
-                    mTimePicker.getCurrentMinute());
-        }
+        tryNotifyTimeSet();
     }
 
     public void updateTime(int hourOfDay, int minutOfHour) {
@@ -129,6 +122,20 @@ public class TimePickerDialog extends AlertDialog
 
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         /* do nothing */
+    }
+
+    private void tryNotifyTimeSet() {
+        if (mCallback != null) {
+            mTimePicker.clearFocus();
+            mCallback.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
+                    mTimePicker.getCurrentMinute());
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        tryNotifyTimeSet();
+        super.onStop();
     }
 
     @Override

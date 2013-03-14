@@ -7,6 +7,8 @@
     <string name="date_picker_dialog_title">Set date</string>
     <!-- Name of the button in the date/time picker to accept the date/time change -->
     <string name="date_time_set">Set</string>
+    <!-- Name of the button in the date/time picker to accept the date/time change -->
+    <string name="date_time_done">Done</string>
     <!-- Preference framework strings. -->
     <string name="cancel">Cancel</string>
 

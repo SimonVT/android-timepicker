@@ -1,7 +1,7 @@
 package net.simonvt.timepicker.samples;
 
-import net.simonvt.app.TimePickerDialog;
-import net.simonvt.widget.TimePicker;
+import net.simonvt.timepicker.TimePickerDialog;
+import net.simonvt.timepicker.TimePicker;
 
 import android.app.Activity;
 import android.app.Dialog;
