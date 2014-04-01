@@ -108,6 +108,14 @@ public class TimePicker extends FrameLayout {
 
     private Locale mCurrentLocale;
 
+    public NumberPicker getmHourSpinner() {
+        return mHourSpinner;
+    }
+
+    public NumberPicker getmMinuteSpinner() {
+        return mMinuteSpinner;
+    }
+
     /**
      * The callback interface used to indicate the time has been adjusted.
      */

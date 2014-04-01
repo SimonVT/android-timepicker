@@ -16,8 +16,6 @@
 
 package net.simonvt.timepicker;
 
-import net.simonvt.timepicker.TimePicker.OnTimeChangedListener;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +24,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import net.simonvt.timepicker.TimePicker.OnTimeChangedListener;
 
 /**
  * A dialog that prompts the user for the time of day using a {@link TimePicker}.
@@ -72,6 +72,34 @@ public class TimePickerDialog extends AlertDialog
             OnTimeSetListener callBack,
             int hourOfDay, int minute, boolean is24HourView) {
         this(context, Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? R.style.Theme_Dialog_Alert : 0, callBack, hourOfDay, minute, is24HourView);
+    }
+
+
+    /**
+     * @param context Parent.
+     * @param callBack How parent is notified.
+     * @param hourOfDay The initial hour.
+     * @param minute The initial minute.
+     * @param is24HourView Whether this is a 24 hour view, or AM/PM.
+     * @param hourDisplayValues to show custom values instead of the hour
+     * @param minuteDisplayValues to show custom values instead of the minute
+     */
+    public TimePickerDialog(Context context, OnTimeSetListener callBack, int hourOfDay, int minute, boolean is24HourView,
+                            String[] hourDisplayValues, String[] minuteDisplayValues) {
+
+        this(context, Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? R.style.Theme_Dialog_Alert : 0, callBack,
+                hourOfDay, minute, is24HourView);
+
+        if(hourDisplayValues!=null)                                             {
+            mTimePicker.getmHourSpinner().setMaxValue(hourDisplayValues.length-1);
+            mTimePicker.getmHourSpinner().setWrapSelectorWheel(false);
+            mTimePicker.getmHourSpinner().setDisplayedValues(hourDisplayValues);
+        }
+        if(minuteDisplayValues!=null) {
+            mTimePicker.getmMinuteSpinner().setMaxValue(minuteDisplayValues.length-1);
+            mTimePicker.getmMinuteSpinner().setDisplayedValues(minuteDisplayValues);
+        }
+
     }
 
     /**
