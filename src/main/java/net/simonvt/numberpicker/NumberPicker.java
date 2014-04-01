@@ -576,7 +576,7 @@ public class NumberPicker extends LinearLayout {
         TypedArray attributesArray = context.obtainStyledAttributes(
                 attrs, R.styleable.NumberPicker, defStyle, 0);
         final int layoutResId = attributesArray.getResourceId(
-                R.styleable.NumberPicker_internalLayout, DEFAULT_LAYOUT_RESOURCE_ID);
+                R.styleable.NumberPicker_internalLayout, R.layout.number_picker_with_selector_wheel);
 
         mHasSelectorWheel = (layoutResId != DEFAULT_LAYOUT_RESOURCE_ID);
 
