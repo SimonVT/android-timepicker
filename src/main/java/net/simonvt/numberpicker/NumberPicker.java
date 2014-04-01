@@ -55,6 +55,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.simonvt.timepicker.R;
+
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
