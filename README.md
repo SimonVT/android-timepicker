@@ -7,4 +7,3 @@
 - updated min-sdk
 
 ### Thanks for checking this out
-[@test_tubebaby](https://twitter.com/test_tubebaby)
