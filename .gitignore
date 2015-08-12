@@ -1,24 +1,54 @@
-/*
+# built application files
+*.apk
+*.ap_
+.idea/
+*.iws
+*.iml
+out/
+obj/
+.svn
+*.bc
+*.bar
+*.lsv
+*.wrn
+# files for the dex VM
+*.dex
+proguard_logs/
+# Java class files
+*.class
 
-!.gitignore
-!README.md
-!pom.xml
+# generated files
+bin/
+gen/
 
-!library/
-library/*
-!library/src/
-!library/res/
-!library/libs/
-!library/AndroidManifest.xml
-!library/build.xml
-!library/project.properties
-!library/pom.xml
+# Local configuration file (sdk path, etc)
+local.properties
 
-!samples/
-samples/*
-!samples/src/
-!samples/res/
-!samples/AndroidManifest.xml
-!samples/build.xml
-!samples/project.properties
-!samples/pom.xml
+# Package Files #
+*.war
+*.ear
+
+target/
+
+# Xcode
+build/*
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+
+.project
+.DS_Store
+.classpath
+
+.gradle/*
+.gradle*
